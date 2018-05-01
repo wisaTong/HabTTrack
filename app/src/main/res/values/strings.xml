@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HBT</string>
+    <string-array name="habits">
+        <item>Laundry</item>
+        <item>Coding</item>
+        <item>Tweeting</item>
+    </string-array>
+</resources>
