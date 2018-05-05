@@ -12,33 +12,33 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
-    LinearLayout linearInTable;
-    TableLayout tableLayout;
-    String[] habits;
+    List<String> activity;
+
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+        //TEST
+        dbHandler = new DBHandler(this, null, null, 1);
+        dbHandler.addActivity("Grieving");
+        dbHandler.addActivity("Crying");
+        dbHandler.deleteActivity("Grieving");
+        //TEST
+
         listView = (ListView) findViewById(R.id.listView);
-        linearInTable = (LinearLayout) findViewById(R.id.linearInTable);
-        habits = getResources().getStringArray(R.array.habits);
+        activity = dbHandler.getActivities();
 
         listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
-        tableLayout.getLayoutParams().height = TableLayout.LayoutParams.WRAP_CONTENT;
 
-        for (String name : habits) {
-            TextView tv = new TextView(this);
-            tv.setText(name);
-            linearInTable.addView(tv);
-        }
-
-        HabitAdapter adapter = new HabitAdapter(this, habits);
+        HabitAdapter adapter = new HabitAdapter(this, activity);
         listView.setAdapter(adapter);
 
 

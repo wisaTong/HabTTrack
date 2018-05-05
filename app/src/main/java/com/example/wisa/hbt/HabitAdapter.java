@@ -11,24 +11,26 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 public class HabitAdapter extends BaseAdapter {
 
     LayoutInflater mInflator;
-    String[] habits;
+    List<String> activity;
 
-    public HabitAdapter(Context c, String[] habits) {
-        this.habits = habits;
+    public HabitAdapter(Context c, List<String> activity) {
+        this.activity = activity;
         this.mInflator = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return habits.length;
+        return activity.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return habits[position];
+        return activity.get(position);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class HabitAdapter extends BaseAdapter {
         TextView name = v.findViewById(R.id.habitNameTextView);
         LinearLayout tracker = v.findViewById(R.id.trackerLinearH);
         tracker.addView(new Button(v.getContext()));
-        name.setText(habits[position]);
+        name.setText(activity.get(position));
         return v;
     }
 }
