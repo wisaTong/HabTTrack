@@ -6,15 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,13 +46,15 @@ public class HabitAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = mInflator.inflate(R.layout.tracker_detail, null);
-        TextView name = v.findViewById(R.id.habitNameTextView);
+        TextView nameText = v.findViewById(R.id.habitNameTextView);
         LinearLayout tracker = v.findViewById(R.id.trackerLinearH);
-        name.setText(activity.get(position));
-        checkDone(activity.get(position), tracker);
+
+        final String name = activity.get(position);
+        nameText.setText(name);
+        addRecord(name, tracker);
 
         CheckBox check = v.findViewById(R.id.checkBox);
-        if (dbHandler.isDoneToday(activity.get(position))) {
+        if (dbHandler.isDoneToday(name)) {
             check.setChecked(true);
             check.setEnabled(false);
         }
@@ -63,21 +62,30 @@ public class HabitAdapter extends BaseAdapter {
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckBox box = (CheckBox) v;
-                Snackbar snack = Snackbar.make(v, "Are you sure?", 2000);
-                snack.setAction("Undo", new View.OnClickListener() {
+                final CheckBox box = (CheckBox) v;
+                Snackbar snack = Snackbar.make(v, "Are you sure?", 3000);
+                snack.setAction("Sure", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Calendar cal = Calendar.getInstance();
+                        dbHandler.addDateCheck(cal.getTime(), dbHandler.getActivityID(name));
+                        notifyDataSetChanged();
                     }
                 });
-                snack.show();
+                snack.addCallback(new Snackbar.Callback(){
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        box.setChecked(false);
+                    }
+                });
+                if (box.isChecked()) snack.show();
             }
         });
         return v;
     }
 
-    private void checkDone(String activity, LinearLayout tracker) {
+    //TODO WRITE A GOOD JAVADOC
+    private void addRecord(String activity, LinearLayout tracker) {
         List<Date> dateList = dbHandler.getDateDone(activity);
 
         Date earliest = dbHandler.getEarliestDate();

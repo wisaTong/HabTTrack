@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">HBT</string>
+    <string name="summary_text">Summary</string>
+    <string name="activities_text">Your activities</string>
     <string-array name="habits">
         <item>Laundry</item>
         <item>Coding</item>

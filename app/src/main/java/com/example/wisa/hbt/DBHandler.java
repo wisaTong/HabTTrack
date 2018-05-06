@@ -229,7 +229,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Query and check whether given activity has been recorded as done
+     * Query and check whether given activity has been
+     * recorded as done today
      * @param activity is String value of activity name
      * @return true if found.
      *         false if not.
