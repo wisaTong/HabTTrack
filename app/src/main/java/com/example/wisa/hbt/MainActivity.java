@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     List<String> activity;
 
     DBHandler dbHandler;
+
+    //TODO REMOVE THIS
+    TextView testView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +35,13 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DBHandler(this, null, null, 1);
         dbHandler.addActivity("Grieving");
         dbHandler.addActivity("Crying");
-        dbHandler.deleteActivity("Grieving");
+
+        Date now = new Date();
+        now.setHours(0);
+        dbHandler.addDateCheck(now, 1);
+        dbHandler.addDateCheck(now, 2);
+        testView = findViewById(R.id.testView);
+        testView.setText(dbHandler.recordToString());
         //TEST
 
         listView = (ListView) findViewById(R.id.listView);
@@ -40,7 +51,5 @@ public class MainActivity extends AppCompatActivity {
 
         HabitAdapter adapter = new HabitAdapter(this, activity);
         listView.setAdapter(adapter);
-
-
     }
 }

@@ -5,4 +5,5 @@
         <item>Coding</item>
         <item>Tweeting</item>
     </string-array>
+    <string name="DATE_FOMAT">yyyy/mm/dd</string>
 </resources>

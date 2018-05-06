@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     // increment everytime changes is made to the database
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 9;
 
     private static final String DATABASE_NAME = "HBTracker.db";
 
@@ -28,6 +28,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String TABLE_TRACKER = "tracker";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_ACTIVITY = "activity";
+
+    public static final String DATE_FOMAT = "yyyy/MM/dd";
 
     /** Constructer */
     public DBHandler (Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -47,7 +49,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 COLUMN_DATE + " TEXT, " +
                 COLUMN_ACTIVITY + " INTEGER," +
                 "FOREIGN KEY(" + COLUMN_ACTIVITY + ") REFERENCES " + TABLE_ACTIVITY +
-                "(" + COLUMN_ID + "));";
+                "(" + COLUMN_ID + "), " + "UNIQUE(" + COLUMN_DATE + ", " + COLUMN_ACTIVITY + "));";
         db.execSQL(query);
     }
 
@@ -76,11 +78,13 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param activityID is ID for activity
      */
     public void addDateCheck(Date date , int activityID){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/mm/dd");
+        SimpleDateFormat formatter = new SimpleDateFormat(DATE_FOMAT);
         String format = formatter.format(date);
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_DATE, format);
         values.put(COLUMN_ACTIVITY, activityID);
+
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_TRACKER, null, values);
         db.close();
@@ -103,17 +107,18 @@ public class DBHandler extends SQLiteOpenHelper {
      */
     public String recordToString() {
         //TODO MODIFY THIS LATER
-        String query = "SELECT * FROM " + TABLE_ACTIVITY;
+        String query = "SELECT * FROM " + TABLE_TRACKER;
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
 
         String data = "";
         if (c.moveToFirst()) {
             do {
-                data += c.getString(c.getColumnIndex(COLUMN_ID));
-                data += (c.getString(c.getColumnIndex(COLUMN_NAME)) + "\n");
+                data += c.getString(c.getColumnIndex(COLUMN_DATE));
+                data += ("     " + c.getString(c.getColumnIndex(COLUMN_ACTIVITY)) + "\n");
             } while (c.moveToNext());
         }
+        db.close();
         c.close();
         return data;
     }
@@ -134,8 +139,43 @@ public class DBHandler extends SQLiteOpenHelper {
                 activities.add(activity);
             } while (c.moveToNext());
         }
+        db.close();
         c.close();
         return activities;
+    }
+
+    /**
+     * Get a List of date that certain activity is marked as done
+     * @param name is String name of activity
+     * @return List<Date>
+     */
+    public List<Date> getDateDone(String name) {
+        String query = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE " + COLUMN_NAME + " = \"" + name + "\"" ;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        int id = c.getInt(c.getColumnIndex(COLUMN_ID));
+        query = "SELECT * FROM " + TABLE_TRACKER + " WHERE " +
+                COLUMN_ACTIVITY + " = " + id;
+        c = db.rawQuery(query,null);
+
+        List<Date> dateList = new ArrayList<>();
+        if (c.moveToFirst()) {
+            do {
+                String date = c.getString(c.getColumnIndex(COLUMN_DATE));
+                SimpleDateFormat formatter = new SimpleDateFormat(DATE_FOMAT);
+                try {
+                    Date parsed = formatter.parse(date);
+                    dateList.add(parsed);
+                } catch (ParseException ex) {
+                    //TODO HANDLE PARSE EXCEPTION
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return dateList;
     }
 
 }
