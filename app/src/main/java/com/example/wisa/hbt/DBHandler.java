@@ -49,7 +49,7 @@ public class DBHandler extends SQLiteOpenHelper {
         query = "CREATE TABLE " + TABLE_ACTIVITY + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NAME + " TEXT UNIQUE, " +
-                COLUMN_START + "TEXT);";
+                COLUMN_START + " TEXT);";
         db.execSQL(query);
 
         // TABLE_TRACKER

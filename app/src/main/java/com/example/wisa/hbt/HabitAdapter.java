@@ -1,11 +1,13 @@
 package com.example.wisa.hbt;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,6 +53,22 @@ public class HabitAdapter extends BaseAdapter {
         LinearLayout tracker = v.findViewById(R.id.trackerLinearH);
         name.setText(activity.get(position));
         checkDone(activity.get(position), tracker);
+
+        CheckBox check = v.findViewById(R.id.checkBox);
+        check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox box = (CheckBox) v;
+                Snackbar snack = Snackbar.make(v, "Are you sure?", 2000);
+                snack.setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        
+                    }
+                });
+                snack.show();
+            }
+        });
         return v;
     }
 
