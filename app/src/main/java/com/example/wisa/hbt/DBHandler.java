@@ -10,13 +10,14 @@ import java.sql.SQLData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
     // increment everytime changes is made to the database
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_NAME = "HBTracker.db";
 
@@ -24,6 +25,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String TABLE_ACTIVITY = "activity";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_START = "startDate";
 
     // Tracker table
     public static final String TABLE_TRACKER = "tracker";
@@ -46,7 +48,8 @@ public class DBHandler extends SQLiteOpenHelper {
         // TABLE_ACTIVITY
         query = "CREATE TABLE " + TABLE_ACTIVITY + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_NAME + " TEXT UNIQUE);";
+                COLUMN_NAME + " TEXT UNIQUE, " +
+                COLUMN_START + "TEXT);";
         db.execSQL(query);
 
         // TABLE_TRACKER
@@ -76,8 +79,13 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param name is String name describing given activity
      */
     public void addActivity(String name) {
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FOMAT);
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, name);
+        values.put(COLUMN_START, format.format(today));
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_ACTIVITY, null, values);
         db.close();
@@ -203,6 +211,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return id;
     }
 
+    /**
+     * @return Date object of the first record in COLUMN_DATE of TABLE_TRACKER
+     */
     public Date getEarliestDate() {
         String query = "SELECT * FROM " + TABLE_TRACKER + " LIMIT 1";
         SQLiteDatabase db = getReadableDatabase();

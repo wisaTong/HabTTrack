@@ -19,6 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
+    LinearLayout summLinearV;
     List<String> activity;
 
     DBHandler dbHandler;
@@ -33,18 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         //TEST
         dbHandler = new DBHandler(this, null, null, 1);
-//        dbHandler.addActivity("Grieving");
-//        dbHandler.addActivity("Crying");
-
-        dbHandler.deleteActivity("Crying");
-
-        Date now = new Date();
-        now.setHours(0);
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-
-//        dbHandler.addDateCheck(cal.getTime(), dbHandler.getActivityID("Grieving"));
-//        dbHandler.addDateCheck(now, dbHandler.getActivityID("Crying"));
 
         testView = findViewById(R.id.testView);
         testView.setText(dbHandler.recordToString());
@@ -54,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
         activity = dbHandler.getActivities();
 
         listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
-
         HabitAdapter adapter = new HabitAdapter(this, activity);
         listView.setAdapter(adapter);
+
+        summLinearV = (LinearLayout) findViewById(R.id.summLinearV);
     }
 }
