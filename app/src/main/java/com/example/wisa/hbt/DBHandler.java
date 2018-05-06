@@ -228,4 +228,25 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Query and check whether given activity has been recorded as done
+     * @param activity is String value of activity name
+     * @return true if found.
+     *         false if not.
+     */
+    public boolean isDoneToday(String activity) {
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        SimpleDateFormat formatter  = new SimpleDateFormat(DATE_FOMAT);
+        String date = formatter.format(today);
+
+        String query = "SELECT " + COLUMN_DATE + ", " + COLUMN_ACTIVITY + " FROM " + TABLE_TRACKER +
+                " WHERE " + COLUMN_DATE + " = " + "\"" + date + "\" AND " +
+                COLUMN_ACTIVITY + " = " + getActivityID(activity);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        if (c.getCount() <= 0) return false;
+        return true;
+    }
+
 }

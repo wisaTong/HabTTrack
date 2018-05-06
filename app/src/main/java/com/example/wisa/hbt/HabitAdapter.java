@@ -55,6 +55,11 @@ public class HabitAdapter extends BaseAdapter {
         checkDone(activity.get(position), tracker);
 
         CheckBox check = v.findViewById(R.id.checkBox);
+        if (dbHandler.isDoneToday(activity.get(position))) {
+            check.setChecked(true);
+            check.setEnabled(false);
+        }
+
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +68,7 @@ public class HabitAdapter extends BaseAdapter {
                 snack.setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        
+
                     }
                 });
                 snack.show();
