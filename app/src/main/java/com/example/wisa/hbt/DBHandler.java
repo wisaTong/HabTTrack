@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.sql.SQLData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class DBHandler extends SQLiteOpenHelper {
     // Tracker table
     public static final String TABLE_TRACKER = "tracker";
     public static final String COLUMN_DATE = "date";
-    public static final String COLUMN_ACTIVITY = "activity";
+    public static final String COLUMN_ACTIVITY = "activity_id";
 
     public static final String DATE_FOMAT = "yyyy/MM/dd";
 
@@ -38,8 +39,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //TURN ON CASCADING DELETES
+        String query = "PRAGMA foreign_keys = ON";
+        db.execSQL(query);
+
         // TABLE_ACTIVITY
-        String query = "CREATE TABLE " + TABLE_ACTIVITY + "(" +
+        query = "CREATE TABLE " + TABLE_ACTIVITY + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NAME + " TEXT UNIQUE);";
         db.execSQL(query);
@@ -47,10 +52,16 @@ public class DBHandler extends SQLiteOpenHelper {
         // TABLE_TRACKER
         query = "CREATE TABLE " + TABLE_TRACKER + "(" +
                 COLUMN_DATE + " TEXT, " +
-                COLUMN_ACTIVITY + " INTEGER," +
+                COLUMN_ACTIVITY + " INTEGER, " +
                 "FOREIGN KEY(" + COLUMN_ACTIVITY + ") REFERENCES " + TABLE_ACTIVITY +
-                "(" + COLUMN_ID + "), " + "UNIQUE(" + COLUMN_DATE + ", " + COLUMN_ACTIVITY + "));";
+                "(" + COLUMN_ID + ") ON DELETE CASCADE, " + "UNIQUE(" + COLUMN_DATE + ", " + COLUMN_ACTIVITY + "));";
         db.execSQL(query);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        db.execSQL("PRAGMA foreign_keys = ON");
     }
 
     @Override
@@ -95,8 +106,10 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param name is name String of activity wanted to delete
      */
     public void deleteActivity(String name) {
+        int id = getActivityID(name);
+        if (id <= 0) return;;
         String query = "DELETE FROM " + TABLE_ACTIVITY + " WHERE " +
-                COLUMN_NAME + " LIKE " + "\"" + name + "\"";
+                 COLUMN_ID + " = " + id;
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(query);
     }
@@ -150,15 +163,11 @@ public class DBHandler extends SQLiteOpenHelper {
      * @return List<Date>
      */
     public List<Date> getDateDone(String name) {
-        String query = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE " + COLUMN_NAME + " = \"" + name + "\"" ;
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-
-        int id = c.getInt(c.getColumnIndex(COLUMN_ID));
-        query = "SELECT * FROM " + TABLE_TRACKER + " WHERE " +
+        int id = getActivityID(name);
+        String query = "SELECT * FROM " + TABLE_TRACKER + " WHERE " +
                 COLUMN_ACTIVITY + " = " + id;
-        c = db.rawQuery(query,null);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query,null);
 
         List<Date> dateList = new ArrayList<>();
         if (c.moveToFirst()) {
@@ -176,6 +185,36 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return dateList;
+    }
+
+    /**
+     * Search for activity id in TABLE_ACTIVITY
+     * @param name String name of activity
+     * @return int value of id
+     */
+    public int getActivityID(String name) {
+        String query = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE " + COLUMN_NAME + " = \"" + name + "\"" ;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        if (c.getCount() <= 0) return 0;
+        int id = Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_ID)));
+        return id;
+    }
+
+    public Date getEarliestDate() {
+        String query = "SELECT * FROM " + TABLE_TRACKER + " LIMIT 1";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FOMAT);
+        try {
+            return format.parse(c.getString(c.getColumnIndex(COLUMN_DATE)));
+        } catch (ParseException ex) {
+            return null;
+        }
     }
 
 }

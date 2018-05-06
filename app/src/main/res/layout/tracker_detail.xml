@@ -22,6 +22,8 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/habitNameTextView"
         android:gravity="center_vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/empty_divider"
         android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

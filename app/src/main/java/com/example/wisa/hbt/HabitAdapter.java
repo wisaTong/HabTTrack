@@ -57,21 +57,30 @@ public class HabitAdapter extends BaseAdapter {
     private void checkDone(String activity, LinearLayout tracker) {
         List<Date> dateList = dbHandler.getDateDone(activity);
 
+        Date earliest = dbHandler.getEarliestDate();
         Calendar start = Calendar.getInstance();
-        start.setTime(dateList.get(0));
+        start.setTime(earliest);
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
 
         SimpleDateFormat formatter = new SimpleDateFormat(DBHandler.DATE_FOMAT);
         while (start.before(today)){
+            ImageView rect = new ImageView(tracker.getContext());
+            rect.setImageResource(R.drawable.empty_rectangle);
+
+            if (dateList.size() <= 0) {
+                tracker.addView(rect);
+                start.add(Calendar.DATE, 1);
+                continue;
+            }
 
             String date1 = formatter.format(dateList.get(0));
             String date2 = formatter.format(start.getTime());
-            ImageView rect = new ImageView(tracker.getContext());
-            if (date1.equals(date2))
+
+            if (date1.equals(date2)) {
                 rect.setImageResource(R.drawable.colored_rectangle);
-            else
-                rect.setImageResource(R.drawable.empty_rectangle);
+                dateList.remove(0);
+            }
 
             tracker.addView(rect);
             start.add(Calendar.DATE, 1);

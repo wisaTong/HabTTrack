@@ -33,13 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         //TEST
         dbHandler = new DBHandler(this, null, null, 1);
-        dbHandler.addActivity("Grieving");
-        dbHandler.addActivity("Crying");
+//        dbHandler.addActivity("Grieving");
+//        dbHandler.addActivity("Crying");
+
+        dbHandler.deleteActivity("Crying");
 
         Date now = new Date();
         now.setHours(0);
-        dbHandler.addDateCheck(now, 1);
-        dbHandler.addDateCheck(now, 2);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+
+//        dbHandler.addDateCheck(cal.getTime(), dbHandler.getActivityID("Grieving"));
+//        dbHandler.addDateCheck(now, dbHandler.getActivityID("Crying"));
+
         testView = findViewById(R.id.testView);
         testView.setText(dbHandler.recordToString());
         //TEST
