@@ -6,9 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import java.sql.SQLData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -166,6 +171,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
+     * @return size of List to count activities
+     */
+    public int getActivityCount() {
+        return getActivities().size();
+    }
+
+    /**
      * Get a List of date that certain activity is marked as done
      * @param name is String name of activity
      * @return List<Date>
@@ -247,7 +259,44 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
         if (c.getCount() <= 0) return false;
+        db.close();
         return true;
+    }
+
+    /**
+     * @param activity is a given activity_id to query
+     * @return number of record of given activity.
+     */
+    public int howManyDone(String activity) {
+        String query = "SELECT * FROM " + TABLE_TRACKER + " WHERE " +
+                COLUMN_ACTIVITY + " = " + getActivityID(activity);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        db.close();
+        return c.getCount();
+    }
+
+    /**
+     * @param activity String value of activity name
+     * @return day count from the dat activity is added
+     */
+    public int daysFromStart(String activity) {
+        String query = "SELECT " + COLUMN_START + " FROM " + TABLE_ACTIVITY + " WHERE " +
+                COLUMN_NAME + " = " + "\"" +activity + "\"";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        String date = c.getString(c.getColumnIndex(COLUMN_START));
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FOMAT);
+        Date start = new Date();
+        try {
+            start = format.parse(date);
+        } catch (ParseException ex) {
+            //TODO HANDLE PARSE EXCEPTION
+        }
+        Calendar cal = Calendar.getInstance();
+        return Days.daysBetween(new DateTime(start), new DateTime(cal.getTime())).getDays() + 1;
     }
 
 }
