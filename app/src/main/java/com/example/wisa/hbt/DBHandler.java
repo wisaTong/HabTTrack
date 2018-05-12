@@ -296,7 +296,7 @@ public class DBHandler extends SQLiteOpenHelper {
             //TODO HANDLE PARSE EXCEPTION
         }
         Calendar cal = Calendar.getInstance();
-        return Days.daysBetween(new DateTime(start), new DateTime(cal.getTime())).getDays() + 1;
+        return Days.daysBetween(new DateTime(start), new DateTime(cal.getTime())).getDays() + 2;
     }
 
 }

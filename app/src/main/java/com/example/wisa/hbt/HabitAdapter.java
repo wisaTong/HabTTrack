@@ -18,14 +18,21 @@ import java.util.List;
 
 public class HabitAdapter extends BaseAdapter {
 
-    LayoutInflater mInflator;
-    List<String> activity;
-    DBHandler dbHandler;
+    private LayoutInflater mInflater;
+    private List<String> activity;
+    private DBHandler dbHandler;
 
-    public HabitAdapter(Context c, List<String> activity) {
-        this.activity = activity;
-        this.mInflator = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dbHandler = new DBHandler(c, null, null, 1);
+    public HabitAdapter(Context c) {
+        this.dbHandler = new DBHandler(c, null, null, 1);
+        this.activity = dbHandler.getActivities();
+        this.mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    /**
+     * Update activities in database
+     */
+    public void updateData(){
+        activity = dbHandler.getActivities();
     }
 
     @Override
@@ -45,7 +52,7 @@ public class HabitAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = mInflator.inflate(R.layout.tracker_detail, null);
+        View v = mInflater.inflate(R.layout.tracker_detail, null);
         TextView nameText = v.findViewById(R.id.habitNameTextView);
         LinearLayout tracker = v.findViewById(R.id.trackerLinearH);
 
