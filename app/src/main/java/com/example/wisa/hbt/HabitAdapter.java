@@ -60,6 +60,13 @@ public class HabitAdapter extends BaseAdapter {
         nameText.setText(name);
         addRecord(name, tracker);
 
+        createCheckBox(v, name);
+
+        return v;
+    }
+
+    //TODO WRITE A OOD JAVADOC
+    private CheckBox createCheckBox(View v, final String name){
         CheckBox check = v.findViewById(R.id.checkBox);
         if (dbHandler.isDoneToday(name)) {
             check.setChecked(true);
@@ -88,7 +95,7 @@ public class HabitAdapter extends BaseAdapter {
                 if (box.isChecked()) snack.show();
             }
         });
-        return v;
+        return check;
     }
 
     //TODO WRITE A GOOD JAVADOC

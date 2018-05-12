@@ -50,9 +50,8 @@ public class MainActivity extends AppCompatActivity {
         addButton = (FloatingActionButton) findViewById(R.id.floatingAddButton);
 
         //TEST
-        dbHandler.deleteActivity("testing");
-        testView = findViewById(R.id.testView);
-        testView.setText(dbHandler.recordToString());
+//        testView = findViewById(R.id.testView);
+//        testView.setText(dbHandler.recordToString());
         //TEST
 
         listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
