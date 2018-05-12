@@ -1,8 +1,10 @@
 package com.example.wisa.hbt;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -10,6 +12,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,10 +23,10 @@ public class InDepthActivity extends AppCompatActivity {
 
     //VIEWS
     BarChart barChart;
+    TextView nameTextView;
 
     //OTHER
     DBHandler dbHandler;
-    String[] colors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,26 +36,30 @@ public class InDepthActivity extends AppCompatActivity {
         //INITIALIZE
         dbHandler = new DBHandler(this, null, null, 1);
         barChart = (BarChart) findViewById(R.id.barChart);
-        colors = getResources().getStringArray(R.array.Color);
+        nameTextView = (TextView) findViewById(R.id.nameTextView);
 
         Intent in = getIntent();
         String name = in.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        nameTextView.setText(name);
 
-        BarDataSet dataSet = new BarDataSet(setBars(name), "day");
-        BarData barData = new BarData(dataSet);
-        dataSet.setColors(new int[] {
-                R.color.color_MON, R.color.color_TUE, R.color.color_WED,
-                R.color.color_THU, R.color.color_FRI, R.color.color_SAT, R.color.color_SUN
-        }, this);
+        BarData barData = new BarData();
+        for (BarDataSet dtst : setBars(name, this)) {
+            barData.addDataSet(dtst);
+        }
+        barChart.setDrawGridBackground(false);
         barChart.setData(barData);
         barChart.invalidate();
     }
 
-    private List<BarEntry> setBars(String name){
+    private List<BarDataSet> setBars(String name, Context c){
         List<Date> dateList = dbHandler.getDateDone(name);
         int daysDone = dateList.size();
+        int[] colors = {
+                R.color.color_MON, R.color.color_TUE, R.color.color_WED,
+                R.color.color_THU, R.color.color_FRI, R.color.color_SAT, R.color.color_SUN
+        };
 
-        List<BarEntry> entries = new ArrayList<>();
+        List<BarDataSet> dataSets = new ArrayList<>();
 
         for (int i = 1; i <= 7; i++){
             int count = 0;
@@ -60,8 +68,18 @@ public class InDepthActivity extends AppCompatActivity {
                 if (dt.getDayOfWeek() == i) count++;
             }
             float percent = (float) (count * 100.0 / daysDone);
-            entries.add(new BarEntry(i, percent));
+
+            LocalDate date = new LocalDate();
+            date = date.withDayOfWeek(i);
+            String dayName = DateTimeFormat.forPattern("EEE").print(date);
+
+            BarEntry entry = new BarEntry(i, percent);
+            List<BarEntry> entries = new ArrayList<>();
+            entries.add(entry);
+            BarDataSet dataSet = new BarDataSet(entries, dayName);
+            dataSet.setColors(new int[] {colors[i-1]}, c);
+            dataSets.add(dataSet);
         }
-        return entries;
+        return dataSets;
     }
 }

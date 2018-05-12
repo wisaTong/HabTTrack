@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -68,6 +69,12 @@ public class HabitAdapter extends BaseAdapter {
                 Intent in = new Intent(v.getContext(), InDepthActivity.class);
                 in.putExtra(MainActivity.EXTRA_MESSAGE, name);
                 v.getContext().startActivity(in);
+            }
+        });
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
             }
         });
         return v;
