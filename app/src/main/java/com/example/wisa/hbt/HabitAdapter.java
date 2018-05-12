@@ -1,6 +1,7 @@
 package com.example.wisa.hbt;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +62,14 @@ public class HabitAdapter extends BaseAdapter {
         addRecord(name, tracker);
 
         createCheckBox(v, name);
-
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(v.getContext(), InDepthActivity.class);
+                in.putExtra(MainActivity.EXTRA_MESSAGE, name);
+                v.getContext().startActivity(in);
+            }
+        });
         return v;
     }
 

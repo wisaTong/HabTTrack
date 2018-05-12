@@ -21,6 +21,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_MESSAGE = "com.example.wisa.hbt.MESSAGE";
+
     //VIEWS
     ListView listView;
     ListView sumListView;
@@ -32,10 +34,8 @@ public class MainActivity extends AppCompatActivity {
     HabitAdapter habitAdapter;
     SumAdapter sumAdapter;
 
+    //DATABASE
     DBHandler dbHandler;
-
-    //TODO REMOVE THIS
-    TextView testView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +48,6 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         sumListView = (ListView) findViewById(R.id.sumListView);
         addButton = (FloatingActionButton) findViewById(R.id.floatingAddButton);
-
-        //TEST
-//        testView = findViewById(R.id.testView);
-//        testView.setText(dbHandler.recordToString());
-        //TEST
 
         listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
         habitAdapter = new HabitAdapter(this);
@@ -79,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 String name = nameET.getText().toString().trim();
                 dbHandler.addActivity(name);
                 habitAdapter.updateData();
+                sumAdapter.updateData();
                 habitAdapter.notifyDataSetChanged();
+                sumAdapter.notifyDataSetChanged();
                 mDialog.dismiss();
             }
         });

@@ -5,11 +5,17 @@
     <string name="add_activity">activity name</string>
     <string name="button_finish">finish</string>
     <string name="button_cacel">cancel</string>
+    <string name="temp">Temp</string>
 
-    <string-array name="habits">
-        <item>Laundry</item>
-        <item>Coding</item>
-        <item>Tweeting</item>
+    <string-array name="Color">
+        <item>#FFBB33</item>
+        <item>#F9B7FF</item>
+        <item>#6AFB92</item>
+        <item>#F9966B</item>
+        <item>#82CAFF</item>
+        <item>#9E7BFF</item>
+        <item>#F75D59</item>
+
     </string-array>
     <string name="DATE_FOMAT">yyyy/mm/dd</string>
 </resources>

@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".inDepthActivity"></activity>
+        <activity android:name=".InDepthActivity"></activity>
     </application>
 
 </manifest>

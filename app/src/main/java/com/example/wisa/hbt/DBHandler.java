@@ -18,11 +18,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 public class DBHandler extends SQLiteOpenHelper {
 
     // increment everytime changes is made to the database
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 17;
 
     private static final String DATABASE_NAME = "HBTracker.db";
 
@@ -39,7 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String DATE_FOMAT = "yyyy/MM/dd";
 
-    /** Constructer */
+    /** Constructor */
     public DBHandler (Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
@@ -171,13 +172,6 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * @return size of List to count activities
-     */
-    public int getActivityCount() {
-        return getActivities().size();
-    }
-
-    /**
      * Get a List of date that certain activity is marked as done
      * @param name is String name of activity
      * @return List<Date>
@@ -220,6 +214,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (c.getCount() <= 0) return 0;
         int id = Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_ID)));
+        c.close();
         return id;
     }
 
@@ -227,14 +222,14 @@ public class DBHandler extends SQLiteOpenHelper {
      * @return Date object of the first record in COLUMN_DATE of TABLE_TRACKER
      */
     public Date getEarliestDate() {
-        String query = "SELECT * FROM " + TABLE_TRACKER + " LIMIT 1";
+        String query = "SELECT * FROM " + TABLE_ACTIVITY + " LIMIT 1";
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
 
         SimpleDateFormat format = new SimpleDateFormat(DATE_FOMAT);
         try {
-            return format.parse(c.getString(c.getColumnIndex(COLUMN_DATE)));
+            return format.parse(c.getString(c.getColumnIndex(COLUMN_START)));
         } catch (ParseException ex) {
             return null;
         }
@@ -260,6 +255,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         if (c.getCount() <= 0) return false;
         db.close();
+        c.close();
         return true;
     }
 
@@ -273,8 +269,10 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
+        int count = c.getCount();
         db.close();
-        return c.getCount();
+        c.close();
+        return count;
     }
 
     /**
@@ -296,7 +294,27 @@ public class DBHandler extends SQLiteOpenHelper {
             //TODO HANDLE PARSE EXCEPTION
         }
         Calendar cal = Calendar.getInstance();
-        return Days.daysBetween(new DateTime(start), new DateTime(cal.getTime())).getDays() + 2;
+        return Days.daysBetween(new DateTime(start), new DateTime(cal.getTime())).getDays() + 1;
     }
+
+    //DEBUG
+    public void addSample(String[] dates, String start, String name){
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_START, start);
+        db.insert(TABLE_ACTIVITY, null, values);
+
+        for (String date : dates) {
+            SimpleDateFormat format = new SimpleDateFormat(DATE_FOMAT);
+            try {
+                addDateCheck(format.parse(date), getActivityID(name));
+            } catch (Exception ex) {
+
+            }
+        }
+    }
+    //DEBUG
 
 }

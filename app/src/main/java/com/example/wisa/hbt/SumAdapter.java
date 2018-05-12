@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class SumAdapter extends BaseAdapter {
 
@@ -19,7 +21,10 @@ public class SumAdapter extends BaseAdapter {
         this.dbHandler = new DBHandler(c, null, null, 1);
         this.activities = dbHandler.getActivities();
         this.mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
+    public void updateData(){
+        this.activities = dbHandler.getActivities();
     }
 
     @Override
