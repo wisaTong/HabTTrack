@@ -22,7 +22,7 @@ import java.util.Observable;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    // increment everytime changes is made to the database
+    // increment every time changes is made to the database structure
     private static final int DATABASE_VERSION = 17;
 
     private static final String DATABASE_NAME = "HBTracker.db";
@@ -276,10 +276,11 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * @param activity String value of activity name
-     * @return day count from the dat activity is added
+     * Query, parse, and return Date object of start date
+     * @param activity is String name of activity
+     * @return start Date
      */
-    public int daysFromStart(String activity) {
+    public Date getStartDate(String activity) {
         String query = "SELECT " + COLUMN_START + " FROM " + TABLE_ACTIVITY + " WHERE " +
                 COLUMN_NAME + " = " + "\"" +activity + "\"";
         SQLiteDatabase db = getReadableDatabase();
@@ -292,12 +293,39 @@ public class DBHandler extends SQLiteOpenHelper {
             start = format.parse(date);
         } catch (ParseException ex) {
             //TODO HANDLE PARSE EXCEPTION
-        }
+        } return start;
+    }
+
+    /**
+     * Query for Text of start date
+     * @param activity is String name of activity
+     * @return String of start date in DATE_FORMAT format
+     */
+    public String startDateString(String activity) {
+        String query = "SELECT " + COLUMN_START + " FROM " + TABLE_ACTIVITY + " WHERE " +
+                COLUMN_NAME + " = " + "\"" +activity + "\"";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        String date = c.getString(c.getColumnIndex(COLUMN_START));
+        return date;
+    }
+
+    /**
+     * @param activity String value of activity name
+     * @return day count from the dat activity is added
+     */
+    public int daysFromStart(String activity) {
+        Date start = getStartDate(activity);
         Calendar cal = Calendar.getInstance();
         return Days.daysBetween(new DateTime(start), new DateTime(cal.getTime())).getDays() + 1;
     }
 
-    //DEBUG
+    /**
+     * Add smaples data to database for debugging
+     * @deprecated do not use please.
+     */
+    @Deprecated
     public void addSample(String[] dates, String start, String name){
         SQLiteDatabase db = getWritableDatabase();
 
@@ -315,6 +343,4 @@ public class DBHandler extends SQLiteOpenHelper {
             }
         }
     }
-    //DEBUG
-
 }

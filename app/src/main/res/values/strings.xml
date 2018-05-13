@@ -5,6 +5,7 @@
     <string name="add_activity">activity name</string>
     <string name="button_finish">finish</string>
     <string name="button_cacel">cancel</string>
+    <string name="detail">Details</string>
     <string name="temp">Temp</string>
 
     <string-array name="Color">

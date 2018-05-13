@@ -32,6 +32,8 @@ public class InDepthActivity extends AppCompatActivity {
     //VIEWS
     BarChart barChart;
     TextView nameTextView;
+    TextView startDate;
+    TextView duration;
 
     //OTHER
     DBHandler dbHandler;
@@ -45,10 +47,17 @@ public class InDepthActivity extends AppCompatActivity {
         dbHandler = new DBHandler(this, null, null, 1);
         barChart = (BarChart) findViewById(R.id.barChart);
         nameTextView = (TextView) findViewById(R.id.nameTextView);
+        startDate = (TextView) findViewById(R.id.startDate);
+        duration = (TextView) findViewById(R.id.durationTextView);
 
         Intent in = getIntent();
         String name = in.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String start = "- Start date : " + dbHandler.startDateString(name);
+        String fromstart = "- " + dbHandler.daysFromStart(name) + " days since start";
+
         nameTextView.setText(name);
+        startDate.setText(start);
+        duration.setText(fromstart);
 
         BarData barData = new BarData();
         for (BarDataSet dtst : setBars(name, this)) {
@@ -113,16 +122,14 @@ public class InDepthActivity extends AppCompatActivity {
         snack.setAction("Sure", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHandler.deleteActivity(nameTextView.getText().toString());
+                dbHandler.deleteActivity(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
                 NavUtils.navigateUpFromSameTask(getActivity()); //reload MainActivity in manifest
             }
         });
         snack.show();
     }
 
-    /**
-     * @return this Activity
-     */
+    /** @return this Activity */
     private Activity getActivity() {
         return this;
     }

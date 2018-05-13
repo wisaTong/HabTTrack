@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     //VIEWS
     ListView listView;
     ListView sumListView;
-    LinearLayout sumLinearV;
     FloatingActionButton addButton;
 
     //OTHER
@@ -49,16 +48,19 @@ public class MainActivity extends AppCompatActivity {
         sumListView = (ListView) findViewById(R.id.sumListView);
         addButton = (FloatingActionButton) findViewById(R.id.floatingAddButton);
 
-//        listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
         habitAdapter = new HabitAdapter(this);
         listView.setAdapter(habitAdapter);
 
-//        sumListView.getLayoutParams().height= ListView.LayoutParams.WRAP_CONTENT;
         sumAdapter = new SumAdapter(this);
         sumListView.setAdapter(sumAdapter);
 
     }
 
+    /**
+     * EventHandler for add button to create new dialog asking
+     * user for the name of new activity and notify listView
+     * to update data in the list.
+     */
     public void addButtonClicked(View view) {
         final Dialog mDialog = new Dialog(this);
         View v = getLayoutInflater().inflate(R.layout.dialog_add_activity, null);

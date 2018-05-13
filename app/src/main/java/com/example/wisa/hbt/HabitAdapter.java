@@ -9,9 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.joda.time.LocalDate;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,9 +34,7 @@ public class HabitAdapter extends BaseAdapter {
         this.mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    /**
-     * Update activities in database
-     */
+    /** Update activities in database */
     public void updateData(){
         activity = dbHandler.getActivities();
     }
@@ -57,6 +59,7 @@ public class HabitAdapter extends BaseAdapter {
         View v = mInflater.inflate(R.layout.tracker_detail, null);
         TextView nameText = v.findViewById(R.id.habitNameTextView);
         LinearLayout tracker = v.findViewById(R.id.trackerLinearH);
+        final HorizontalScrollView hScroll = v.findViewById(R.id.hScroll);
 
         final String name = activity.get(position);
         nameText.setText(name);
@@ -77,10 +80,25 @@ public class HabitAdapter extends BaseAdapter {
                 return false;
             }
         });
+
+        hScroll.post(new Runnable() {
+            @Override
+            public void run() {
+                hScroll.fullScroll(View.FOCUS_RIGHT); // pull all the way to right
+            }
+        });
         return v;
     }
 
-    //TODO WRITE A OOD JAVADOC
+    /**
+     * Create CheckBox and setOnClickListener to pop a snackBar
+     * asking use if they are sure that they did the activity
+     * then use DBHandler to add dateCheck to the database.
+     * also notify listViews after activity is checked.
+     * @param v is a Parent View containing this CheckBox
+     * @param name is String name of activity associate with this CheckBox
+     * @return CheckBox created
+     */
     private CheckBox createCheckBox(View v, final String name){
         CheckBox check = v.findViewById(R.id.checkBox);
         if (dbHandler.isDoneToday(name)) {
@@ -126,7 +144,7 @@ public class HabitAdapter extends BaseAdapter {
         SimpleDateFormat formatter = new SimpleDateFormat(DBHandler.DATE_FOMAT);
         while (start.before(today)){
             ImageView rect = new ImageView(tracker.getContext());
-            rect.setImageResource(R.drawable.empty_rectangle);
+            rect.setImageResource(R.drawable.not_done_rectangle);
 
             if (dateList.size() <= 0) {
                 tracker.addView(rect);
