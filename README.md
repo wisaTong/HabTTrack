@@ -5,13 +5,16 @@
 This application is used to track your activities you have done that day. 
 User can add custom activity and view visualization of their behavior.
 
-## Spec
-	Android with api level 15 and higher.
+BarChart use MPAndroidChart from https://github.com/PhilJay/MPAndroidChart
+
+DateTime library use **joda-Time 2.9**
+
+Support Android with api level 15 and higher.
 
 ## Home
-![](sampleImage/sample1.png?raw=true){:height="30%" width="30%"}
+![](sampleImage/sample1.jpeg?raw=true)
 
 
 ## Detail
-![](sampleImage/sample2.png?raw=true){:height="30%" width="30%"}
+![](sampleImage/sample2.jpeg?raw=true)
 
