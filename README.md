@@ -1,12 +1,20 @@
-# HabTTrack
+# Habit Tracker. You can Download release APK here : https://goo.gl/Knrt2B
 
-Home
+## Overview
 -------
-![](sampleImage/sample1.png?raw=true)
+This application is used to track your activities you have done that day. 
+User can add custom activity and view visualization of their behavior.
 
-
-Detail
+## Spec
 -------
-![](sampleImage/sample2.png?raw=true)
+	Android with api level 15 and higher.
 
-You can Download release APK here : https://goo.gl/Knrt2B
+## Home
+-------
+![](sampleImage/sample1.png?raw=true) {:height="30%" width="30%"}
+
+
+## Detail
+-------
+![](sampleImage/sample2.png?raw=true) {:height="30%" width="30%"}
+
