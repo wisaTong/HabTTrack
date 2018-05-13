@@ -1,7 +1,10 @@
 package com.example.wisa.hbt;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -104,8 +108,22 @@ public class InDepthActivity extends AppCompatActivity {
      * Use DBHandler to delete current activity from database
      * and re-open MainActivity
      */
-    public void handleDelete(View view) {
-        dbHandler.deleteActivity(nameTextView.getText().toString());
-        NavUtils.navigateUpFromSameTask(this); //reload MainActivity in manifest
+    public void handleDelete(final View view) {
+        final Snackbar snack = Snackbar.make(view, "Are you sure?", 3000);
+        snack.setAction("Sure", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHandler.deleteActivity(nameTextView.getText().toString());
+                NavUtils.navigateUpFromSameTask(getActivity()); //reload MainActivity in manifest
+            }
+        });
+        snack.show();
+    }
+
+    /**
+     * @return this Activity
+     */
+    private Activity getActivity() {
+        return this;
     }
 }
