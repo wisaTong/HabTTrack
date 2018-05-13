@@ -12,9 +12,9 @@ DateTime library use **joda-Time 2.9**
 Support Android with api level 15 and higher.
 
 ## Home
-![](sampleImage/sample1.jpeg?raw=true)
+![](sampleImage/sample1.jpg?raw=true)
 
 
 ## Detail
-![](sampleImage/sample2.jpeg?raw=true)
+![](sampleImage/sample2.jpg?raw=true)
 
