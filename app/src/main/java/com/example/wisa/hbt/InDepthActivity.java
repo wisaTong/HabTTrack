@@ -2,11 +2,15 @@ package com.example.wisa.hbt;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -50,11 +54,19 @@ public class InDepthActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawGridLines(false);
         barChart.getAxisRight().setDrawAxisLine(false);
         barChart.getXAxis().setEnabled(false);
+        barChart.getLegend().setPosition(Legend.LegendPosition.ABOVE_CHART_RIGHT);
+
+        Description desc = new Description();
+        desc.setText("Percentage of activity done by day of week");
+        desc.setTextSize(11F);
+        barChart.setDescription(desc);
+
         barChart.setData(barData);
         barChart.animateY(1500);
         barChart.invalidate();
     }
 
+    //TODO WRITE A GOOD JAVADOC
     private List<BarDataSet> setBars(String name, Context c){
         List<Date> dateList = dbHandler.getDateDone(name);
         int daysDone = dateList.size();
@@ -85,5 +97,15 @@ public class InDepthActivity extends AppCompatActivity {
             dataSets.add(dataSet);
         }
         return dataSets;
+    }
+
+    /**
+     * Event handler for floating action button
+     * Use DBHandler to delete current activity from database
+     * and re-open MainActivity
+     */
+    public void handleDelete(View view) {
+        dbHandler.deleteActivity(nameTextView.getText().toString());
+        NavUtils.navigateUpFromSameTask(this); //reload MainActivity in manifest
     }
 }

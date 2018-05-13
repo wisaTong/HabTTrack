@@ -50,7 +50,7 @@ public class SumAdapter extends BaseAdapter {
         TextView record = v.findViewById(R.id.recordTextView);
 
         name.setText("- " + actv);
-        String format = dbHandler.howManyDone(actv) + "/" + dbHandler.daysFromStart(actv);
+        String format = String.format("%2d/%2d days", dbHandler.howManyDone(actv), dbHandler.daysFromStart(actv));
         record.setText(format);
         return v;
     }

@@ -23,16 +23,23 @@
         android:text="Habit"
         android:textSize="15sp" />
 
-    <LinearLayout
-        android:id="@+id/trackerLinearH"
-        android:layout_width="236dp"
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignTop="@id/checkBox"
-        android:divider="@drawable/empty_divider"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_toRightOf="@id/habitNameTextView"
-        android:layout_alignParentRight="true"
-        android:showDividers="middle"/>
+        android:layout_toRightOf="@id/habitNameTextView">
+
+        <LinearLayout
+            android:id="@+id/trackerLinearH"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:divider="@drawable/empty_divider"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:showDividers="middle"/>
+
+    </HorizontalScrollView>
+
+
 
 </RelativeLayout>

@@ -49,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
         sumListView = (ListView) findViewById(R.id.sumListView);
         addButton = (FloatingActionButton) findViewById(R.id.floatingAddButton);
 
-        listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
+//        listView.getLayoutParams().height = ListView.LayoutParams.WRAP_CONTENT;
         habitAdapter = new HabitAdapter(this);
         listView.setAdapter(habitAdapter);
 
-        sumListView.getLayoutParams().height= ListView.LayoutParams.WRAP_CONTENT;
+//        sumListView.getLayoutParams().height= ListView.LayoutParams.WRAP_CONTENT;
         sumAdapter = new SumAdapter(this);
         sumListView.setAdapter(sumAdapter);
 
