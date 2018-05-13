@@ -46,8 +46,12 @@ public class InDepthActivity extends AppCompatActivity {
         for (BarDataSet dtst : setBars(name, this)) {
             barData.addDataSet(dtst);
         }
-        barChart.setDrawGridBackground(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawAxisLine(false);
+        barChart.getXAxis().setEnabled(false);
         barChart.setData(barData);
+        barChart.animateY(1500);
         barChart.invalidate();
     }
 

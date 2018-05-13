@@ -3,11 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="color_MON">#FFBB33</color>
-    <color name="color_TUE">#F9B7FF</color>
-    <color name="color_WED">#6AFB92</color>
-    <color name="color_THU">#F9966B</color>
-    <color name="color_FRI">#82CAFF</color>
-    <color name="color_SAT">#9E7BFF</color>
-    <color name="color_SUN">#F75D59</color>
+    <color name="color_MON">#ffdab4</color>
+    <color name="color_TUE">#daffb4</color>
+    <color name="color_WED">#b4ffda</color>
+    <color name="color_THU">#b4ffff</color>
+    <color name="color_FRI">#b4b4ff</color>
+    <color name="color_SAT">#dab4ff</color>
+    <color name="color_SUN">#ffb4da</color>
 </resources>
