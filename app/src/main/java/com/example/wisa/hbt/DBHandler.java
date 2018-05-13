@@ -129,28 +129,6 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * read all data from TABLE_TRACKER and return as String
-     * @return String value of all data in TABLE_ACTIVITY
-     */
-    public String recordToString() {
-        //TODO MODIFY THIS LATER
-        String query = "SELECT * FROM " + TABLE_TRACKER;
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery(query, null);
-
-        String data = "";
-        if (c.moveToFirst()) {
-            do {
-                data += c.getString(c.getColumnIndex(COLUMN_DATE));
-                data += ("     " + c.getString(c.getColumnIndex(COLUMN_ACTIVITY)) + "\n");
-            } while (c.moveToNext());
-        }
-        db.close();
-        c.close();
-        return data;
-    }
-
-    /**
      * Query and get a list of String of activities in TABLE_ACTIVITY
      * @return List of activities name
      */

@@ -131,7 +131,13 @@ public class HabitAdapter extends BaseAdapter {
         return check;
     }
 
-    //TODO WRITE A GOOD JAVADOC
+    /**
+     * Loop over Dates from earliest date recorded to current date
+     * and check whether that date is in the record if it is then add
+     * a specific rectangle accordingly.
+     * @param activity String name of activity
+     * @param tracker LinearLayout for convenience
+     */
     private void addRecord(String activity, LinearLayout tracker) {
         List<Date> dateList = dbHandler.getDateDone(activity);
 

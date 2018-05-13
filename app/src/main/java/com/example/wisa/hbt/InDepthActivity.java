@@ -79,7 +79,14 @@ public class InDepthActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
-    //TODO WRITE A GOOD JAVADOC
+    /**
+     * Loop 7 time each time represent day of week
+     * then gather and calculate data from data base and create
+     * BarDataSet to present a barGraph
+     * @param name String name of activity
+     * @param c Context for convenience
+     * @return List<BarDataSet> containing 7 bar representing days of week.
+     */
     private List<BarDataSet> setBars(String name, Context c){
         List<Date> dateList = dbHandler.getDateDone(name);
         int daysDone = dateList.size();
