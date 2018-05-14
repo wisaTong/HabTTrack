@@ -16,7 +16,6 @@
         android:layout_marginRight="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="addButtonClicked"
         android:src="@drawable/plus"
         app:layout_anchor="@+id/constraintLayout"
         app:layout_anchorGravity="right|bottom"

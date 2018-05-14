@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class InDepthActivity extends AppCompatActivity {
 
     //VIEWS
     BarChart barChart;
+    FloatingActionButton floatDelete;
     TextView nameTextView;
     TextView startDate;
     TextView duration;
@@ -49,6 +51,8 @@ public class InDepthActivity extends AppCompatActivity {
         nameTextView = (TextView) findViewById(R.id.nameTextView);
         startDate = (TextView) findViewById(R.id.startDate);
         duration = (TextView) findViewById(R.id.durationTextView);
+        floatDelete = (FloatingActionButton) findViewById(R.id.floatingDeleteButton);
+
 
         Intent in = getIntent();
         String name = in.getStringExtra(MainActivity.EXTRA_MESSAGE);
@@ -58,6 +62,20 @@ public class InDepthActivity extends AppCompatActivity {
         nameTextView.setText(name);
         startDate.setText(start);
         duration.setText(fromstart);
+        floatDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Snackbar snack = Snackbar.make(v, "Are you sure?", 3000);
+                snack.setAction("Sure", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dbHandler.deleteActivity(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
+                        NavUtils.navigateUpFromSameTask(getActivity()); //reload MainActivity in manifest
+                    }
+                });
+                snack.show();
+            }
+        });
 
         BarData barData = new BarData();
         for (BarDataSet dtst : setBars(name, this)) {
@@ -117,23 +135,6 @@ public class InDepthActivity extends AppCompatActivity {
             dataSets.add(dataSet);
         }
         return dataSets;
-    }
-
-    /**
-     * Event handler for floating action button
-     * Use DBHandler to delete current activity from database
-     * and re-open MainActivity
-     */
-    public void handleDelete(final View view) {
-        final Snackbar snack = Snackbar.make(view, "Are you sure?", 3000);
-        snack.setAction("Sure", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dbHandler.deleteActivity(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
-                NavUtils.navigateUpFromSameTask(getActivity()); //reload MainActivity in manifest
-            }
-        });
-        snack.show();
     }
 
     /** @return this Activity */

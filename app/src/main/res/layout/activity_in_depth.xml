@@ -8,7 +8,7 @@
     android:theme="@style/AppTheme.NoActionBar">
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/floatingDeleteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -16,7 +16,6 @@
         android:layout_marginRight="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="handleDelete"
         app:layout_anchor="@+id/constraintLayout2"
         app:layout_anchorGravity="right|bottom"
         app:layout_constraintBottom_toBottomOf="parent"

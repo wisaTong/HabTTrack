@@ -65,6 +65,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 "FOREIGN KEY(" + COLUMN_ACTIVITY + ") REFERENCES " + TABLE_ACTIVITY +
                 "(" + COLUMN_ID + ") ON DELETE CASCADE, " + "UNIQUE(" + COLUMN_DATE + ", " + COLUMN_ACTIVITY + "));";
         db.execSQL(query);
+
+//        //add Sample
+//        String[] date = {
+//                "2018/05/05", "2018/05/06", "2018/05/07", "2018/05/08", "2018/05/09", "2018/05/10", "2018/05/11"
+//        };
+//        addSample(date, date[0], "Sample1");
+//        addSample(date, date[0], "Sample2");
+//        addSample(date, date[0], "Sample3");
+
     }
 
     @Override

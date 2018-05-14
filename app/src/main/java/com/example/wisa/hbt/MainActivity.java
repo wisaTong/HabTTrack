@@ -54,42 +54,43 @@ public class MainActivity extends AppCompatActivity {
         sumAdapter = new SumAdapter(this);
         sumListView.setAdapter(sumAdapter);
 
+        ((FloatingActionButton) findViewById(R.id.floatingAddButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vd) {
+                final Dialog mDialog = new Dialog(getContext());
+                View v = getLayoutInflater().inflate(R.layout.dialog_add_activity, null);
+                mDialog.setContentView(v);
+
+                final EditText nameET = v.findViewById(R.id.nameEditText);
+                Button add = v.findViewById(R.id.addButton);
+                Button cancel = v.findViewById(R.id.cancelButton);
+
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String name = nameET.getText().toString().trim();
+                        dbHandler.addActivity(name);
+                        habitAdapter.updateData();
+                        sumAdapter.updateData();
+                        habitAdapter.notifyDataSetChanged();
+                        sumAdapter.notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+                });
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDialog.dismiss();
+                    }
+                });
+
+                mDialog.show();
+            }
+        });
     }
 
-    /**
-     * EventHandler for add button to create new dialog asking
-     * user for the name of new activity and notify listView
-     * to update data in the list.
-     */
-    public void addButtonClicked(View view) {
-        final Dialog mDialog = new Dialog(this);
-        View v = getLayoutInflater().inflate(R.layout.dialog_add_activity, null);
-        mDialog.setContentView(v);
-
-        final EditText nameET = v.findViewById(R.id.nameEditText);
-        Button add = v.findViewById(R.id.addButton);
-        Button cancel = v.findViewById(R.id.cancelButton);
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = nameET.getText().toString().trim();
-                dbHandler.addActivity(name);
-                habitAdapter.updateData();
-                sumAdapter.updateData();
-                habitAdapter.notifyDataSetChanged();
-                sumAdapter.notifyDataSetChanged();
-                mDialog.dismiss();
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-            }
-        });
-
-        mDialog.show();
+    public Context getContext(){
+        return this;
     }
 }
