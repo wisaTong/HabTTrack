@@ -1,5 +1,5 @@
 # Habit Tracker. 
-**You can Download release APK here : https://goo.gl/ALz2vf**
+**You can Download release APK here : https://goo.gl/2W94r6**
 
 ## Overview
 This application is used to track your activities you have done that day. 
